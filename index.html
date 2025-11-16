@@ -119,7 +119,7 @@
       measurementId: "G-9P6ZL4D5RW"
     };
 
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { initializeApp } from "./firebase/firebase-app.js";
     import {
       getFirestore,
       collection,
@@ -132,7 +132,7 @@
       doc,
       enableIndexedDbPersistence,
       updateDoc
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    } from "./firebase/firebase-firestore.js";
 
     // Validar config (no modifiques los checks a valores reales)
     const isConfigComplete = Object.values(firebaseConfig).every(
@@ -351,5 +351,6 @@
   </script>
 </body>
 </html>
+
 
 
