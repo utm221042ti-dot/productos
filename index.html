@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Proyectos</title>
+    <title>Registro de Productos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css">
     <style>
@@ -29,6 +29,14 @@
 </style>
 </head>
 <body class="bg-light">
+
+    <main class="container mt-4">
+     <div id="alertConfig" class="alert alert-warning d-none">
+    <strong>Configura Firebase:</strong> Abre <code>index.html</code> y pega tu <em>firebaseConfig</em>.
+  </div>
+
+  <div id="productsContainer" class="row"></div>
+    </main>
     <div class="container py-5">
         <div class="text-center mb-4">
             <h1 class="display-4 text-primary mb-3">Gestión de Productos</h1>
@@ -330,3 +338,4 @@ form.addEventListener('submit', async function (e) {
 </body>
 
 </html>
+
