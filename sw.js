@@ -1,39 +1,36 @@
-const CACHE_NAME = 'productos-pwa';
-const PRECACHE_URLS = [
+const CACHE = 'productos-pwa';
+const ASSETS = [
     './',
-    './index.html?homescreen=v2',
+    './index.html',
     './manifest.webmanifest',
     './icons/icon-192.png',
     './icons/icon-512.png',
+    'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css',
+    'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js',
+    'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css'
 ];
 
-self.addEventListener('install', (event) => {
-    event.waitUntil(
-        caches.open(CACHE_NAME).then(cache => cache.addAll(PRECACHE_URLS))
+self.addEventListener('install', (e) => {
+    e.waitUntil(
+        caches.open(CACHE).then(c => c.addAll(ASSETS))
     );
 });
 
-self.addEventListener('activate', (event) => {
-    event.waitUntil(
-        caches.keys().then(keys => Promise.all(keys.map(k => k !== CACHE_NAME && caches.delete(k))))
-    );
+self.addEventListener('activate', (e) => {
+  e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));
 });
 
-self.addEventListener('fetch', (event) =>{
-    event.respondWith(
-        caches.match(event.request, {ignoreSearch: true}).then(cached =>
-            cached || fetch(event.request).then(resp => {
-                try{
-                    if (event.request.method === 'GET') {
-                        const copy = resp.clone();
-                        caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
-                    }
-                } catch (e){}
-                return resp;
-            }).catch(() => {
-                if (event.request.destination === 'document') return caches.match('./index.html');
-                return new Response('', {status: 503, statusText: 'Offline'});
-            })
-        )
-    );
+self.addEventListener('fetch', (e) => {
+  const req = e.request;
+  // Network first for Firebase calls, cache first for static
+  const isStatic = ASSETS.some(a => req.url.includes(a));
+  if (isStatic) {
+    e.respondWith(caches.match(req).then(res => res || fetch(req)));
+  } else {
+    e.respondWith(fetch(req).then(res => {
+      const copy = res.clone();
+      caches.open(CACHE).then(c => c.put(req, copy));
+      return res;
+    }).catch(()=>caches.match(req)));
+  }
 });
