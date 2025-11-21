@@ -308,6 +308,16 @@
       }
     });
 
+    // Botón Limpiar Todo
+     document.getElementById("clearAll").addEventListener("click", async () => {
+      if (!confirm("¿Eliminar TODOS los productos?")) return;
+
+      try {
+      const snap = await onSnapshot(query(collection(db, "productos")));
+       snap.forEach(async (docu) => {
+       await deleteDoc(doc(db, "productos", docu.id));
+      });
+
   </script>
 
   <!--Botón para instalar la app-->
@@ -350,6 +360,7 @@
   </script>
 </body>
 </html>
+
 
 
 
